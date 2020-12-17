@@ -1,7 +1,7 @@
 Rails.application.routes.draw do
   devise_for :users
   root to: 'prototypes#index'
-  resources :prototypes, only: [:new, :create, :show, :edit, :update]
+  resources :prototypes, only: [:new, :create, :show, :edit, :update, :destroy]
 
   get "login" => "sessions#new"
   get "login" => "sessions#create"
