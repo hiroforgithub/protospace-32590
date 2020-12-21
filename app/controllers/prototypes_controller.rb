@@ -1,11 +1,12 @@
 class PrototypesController < ApplicationController
   before_action :authenticate_user!, except: [:index, :show]
   before_action :set_prototype, except: [:index, :new, :create]
-
+  before_action :move_to_index, only: [:edit, :update, :destroy]
+  
   def index
     @prototypes = Prototype.all
   end
-
+  
   def new
     @prototype = Prototype.new
   end
@@ -18,15 +19,19 @@ class PrototypesController < ApplicationController
       render :new
     end
   end
-
+  
   def show
     @comment = Comment.new
     @comments = @prototype.comments
   end
-
-  def edit
-  end
   
+  def edit
+    # unless user_signed_in?
+    #   redirect_to root_path
+    # end
+  end
+
+
   def update
     if @prototype.update(prototype_params)
       redirect_to prototype_path(@prototype)
@@ -53,8 +58,8 @@ class PrototypesController < ApplicationController
   end
   
   def move_to_index
-    unless user_signed_in?
-      redirect_to action: :index
+    unless current_user.id == @prototype.user_id
+      redirect_to root_path
     end
   end
 end
